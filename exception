@@ -1,0 +1,304 @@
+#ifndef MASTMP_H
+#define MASTMP_H
+#include <iostream>
+#include <cassert>
+#include <memory.h>
+#include <stdlib.h>
+#include <exception>
+using namespace std;
+
+template <typename T>// шаблонный класс
+class mastmp {
+private:
+    int size;
+    T* array;
+public:
+    mastmp() {
+        mastmp(5);
+    }
+    mastmp(int initSize) {
+        size = initSize;
+        array = new T[size];
+        for (int i = 0; i < size; i++) {
+            array[i] = 0; // Fill with zeroes
+        }
+    }
+    mastmp(const mastmp& original) { // конструтор копирования
+        size = original.size;
+        array = new int[size];
+        for (int i = 0; i < size; i++) {
+            array[i] = original.array[i];
+        }
+    }
+
+    ~mastmp() {// деструтор
+        delete[] array;// удаляем указатель на массив
+    };
+
+
+    bool settercheck(T a) { 
+        try {
+            if (abs(a) > 100) throw invalid_argument("error");
+            else return true;
+        }
+        catch (invalid_argument) {
+            cerr << "invalid argument";
+            return false;
+
+        }
+
+    }
+    bool poscheck(int pos) {
+        try {
+            if (pos > size || pos < 0) throw out_of_range("error");
+            else return true;
+        }
+        catch (out_of_range) {
+            cerr << "out of range";
+            return false;
+        }
+    }
+    void insert(int position, T value) {// втсавка элимента начиная с какого-то индекса
+        try {
+            if (settercheck(value) && poscheck(position)) {
+                array[position] = value;
+            }
+        }
+        catch (invalid_argument e) {
+            cerr << e.what();// встроенный метод в exceptions выведет в каком месте исключение и текст исключения
+        }
+
+    }
+
+
+
+    int get(int position) {
+        if (poscheck(position))
+            return array[position];
+        else cout << "err" << endl;
+        return -1;
+    };
+
+    int getSize() {
+        return size;
+    };
+
+    void resize(int newSize) {
+        int* temp;
+        try {
+            temp = new T[newSize];
+            for (int i = 0; i < (newSize); i++) {
+                temp[i] = array[i];
+            }
+            delete[] array;
+            array = temp;
+            size = newSize;
+        }
+        catch (bad_alloc) {
+            cerr << "bad aloc";
+            delete[] temp;
+        }
+
+
+    }
+
+
+    int& operator[](int index) {
+        if ((index - 1) > size) {
+            resize(index + 1);
+        }
+        return array[index]; // returned as a reference
+    }
+
+    bool operator==(mastmp arr) {
+        if (arr.size != size) return false;
+
+        for (int i = 0; i < (arr.size); i++) {
+            if (arr[i] != array[i]) return false;
+        }
+        return true;
+    }
+
+    bool operator!=(mastmp arr) {
+        if (arr.size != size) return true;
+
+        for (int i = 0; i < (arr.size); i++) {
+            if (arr[i] != array[i]) return true;
+        }
+        return false;
+    }
+    mastmp operator+(const int a);
+    mastmp operator+=(const int a);
+
+    mastmp operator+(mastmp rhs) {
+        if (size < rhs.size) {
+            mastmp* e = array;
+            try {
+                *array = *((int*)realloc((void*)(*array), sizeof(T) * (rhs.size + 1)));
+                for (int i = size + 1; i < rhs.size; ++i)
+                    array[i] = 0;
+                int size1 = rhs.size;
+                for (int i = 1; i <= size1; ++i)
+                    array[i] += rhs.array[i];
+            }
+            catch (bad_alloc) {
+                array = e;
+                cerr << "bad_alloc, returning last array";
+                return *this;
+            }
+
+        }
+        else {
+            for (int i = 0; i < rhs.size; ++i)
+                array[i] += rhs.array[i];
+
+        }
+        return *this;
+    }
+
+    mastmp operator+=(mastmp rhs) {
+        if (size < rhs.size) {
+            mastmp* e = array;
+            try {
+                *array = *((int*)realloc((void*)(*array), sizeof(T) * (rhs.size + 1)));
+                for (int i = size + 1; i < rhs.size; ++i)
+                    array[i] = 0;
+                int size1 = rhs.size;
+                for (int i = 1; i <= size1; ++i)
+                    array[i] += rhs.array[i];
+            }
+            catch (bad_alloc) {
+                array = e;
+                cerr << "bad_alloc, returning last array";
+                return *this;
+            }
+
+        }
+        else {
+            for (int i = 0; i < rhs.size; ++i)
+                array[i] += rhs.array[i];
+
+        }
+        return *this;
+    }
+    mastmp operator-(mastmp rhs) {
+        mastmp* e = array;
+        if (size < rhs.size) {
+            try {
+                *array = *((int*)realloc((void*)(*array), sizeof(int) * (rhs.size + 1)));
+                for (int i = size + 1; i < rhs.size; ++i)
+                    array[i] = 0;
+                int size1 = rhs.size;
+                for (int i = 1; i <= size1; ++i)
+                    array[i] -= rhs.array[i];
+
+            }
+            catch (bad_alloc) {
+                array = e;
+                cerr << "bad_alloc, returning last array";
+                return *this;
+            }
+
+        }
+        else {
+            for (int i = 0; i < rhs.size; ++i)
+                array[i] -= rhs.array[i];
+
+        }
+        return *this;
+    }
+    mastmp operator-=(mastmp rhs) {
+        mastmp* e = array;
+        if (size < rhs.size) {
+            try {
+                *array = *((int*)realloc((void*)(*array), sizeof(int) * (rhs.size + 1)));
+                for (int i = size + 1; i < rhs.size; ++i)
+                    array[i] = 0;
+                int size1 = rhs.size;
+                for (int i = 1; i <= size1; ++i)
+                    array[i] -= rhs.array[i];
+
+            }
+            catch (bad_alloc) {
+                array = e;
+                cerr << "bad_alloc, returning last array";
+                return *this;
+            }
+
+        }
+        else {
+            for (int i = 0; i < rhs.size; ++i)
+                array[i] -= rhs.array[i];
+
+        }
+        return *this;
+    }
+    mastmp operator=(mastmp rhs) {
+        return mastmp(rhs);
+    };
+
+
+    int setter(T a, int pos) {
+        try {
+            if (poscheck(pos) && settercheck(a)) {
+                array[pos] = a;
+                return 1;
+            }
+
+        }
+        catch (invalid_argument& e) {
+            cerr << e.what();
+            return -1;
+        }
+
+    }
+
+
+    T getter(int pos) {
+        try {
+            if (poscheck(pos)) {
+                return array[pos];
+            }
+        }
+        catch (...) {
+            cerr << "there is not this possition";
+            return -1;
+
+        }
+
+
+
+    };
+
+    friend std::ostream& operator<<(std::ostream& output, const mastmp& rhs) {
+        int i;
+        for (i = 0; i < rhs.size; i++)
+        {
+            output << rhs.array[i] << " ";
+        }
+
+        output << std::endl;
+        return output;
+
+    }
+
+    float vector_distance(mastmp& rhs) {
+        if (size == rhs.size) {
+            float d;
+            for (int i = 0; i < size - 1; i++)
+            {
+                d += sqrt(pow((array[i] - rhs.array), 2));
+
+            }
+
+
+            return d;
+        }
+        return -1;
+    }
+};
+
+
+
+
+#endif // MASTMP_H
