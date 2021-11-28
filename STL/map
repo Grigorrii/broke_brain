@@ -1,0 +1,79 @@
+#include <iostream>
+#include <map>
+#include <string>
+using namespace std;
+// в результате выполнения программы мы узнаем, сколько раз встречается каждое слово
+class Loh
+{
+
+public:
+    Loh(const string& str)
+    {
+        int temp = 0;
+        char space(32);// 32 - пробел в таблице ASCII
+        for (int i = 0; i <= str.size(); i++)
+        {
+            if (str[i] == space or i == str.size())
+            {
+                add(str, temp, i);
+                temp = i + 1;// Прибавляем единицу, чтобы пробел не попал в следующее слово
+            }
+        }
+    }
+    ~Loh() {}
+
+
+    void find(const string& str)
+    {
+        if (loh.count(str))
+        {
+            cout << str << ": " << loh[str] << endl;
+        }
+        else
+        {
+            cout << str << ": 0" << endl;
+        }
+    }
+    void print()
+    {
+        for (auto& item : loh)
+        {
+            cout << item.first << ": " << item.second << endl;
+        }
+    }
+
+private:
+    map<string, int> loh;
+
+    void add(const string& str, int temp, int p)
+    {
+        char space(32);
+        string slovo = "";
+        for (int i = temp; i < p; i++)// Обратно собираем слово нужное слово
+        {
+            slovo += str[i];
+        }
+        if (slovo != "")
+        {
+            if (loh.count(slovo))// Если слово уже есть в словаре, то инкрементируем его значение
+            {
+                loh[slovo] += 1;
+            }
+
+            else
+            {
+                loh[slovo] = 1;// Иначе создаем новый ключ с значением 1
+            }
+        }
+       
+    }
+};
+
+int main()
+{
+    string str = "rowing is the best way";
+    Loh loh(str);// обращаемся к эзмепляру класса
+    loh.print();// выводим результат
+    loh.find("rowing");
+
+}
