@@ -4,18 +4,18 @@
 #include <ctime>
 
 using namespace std;
-class Vector
+class Loh
 {
 
 public:
-    Vector(int& size)
+    Loh(int& size)
     {
         for (int i = 0; i < size; i++)
         {
             array.push_back(rand() % 200 - 100);
         }
     }
-    ~Vector() {}
+    ~Loh() {}
 
     void add(int value)
     {
@@ -50,7 +50,7 @@ public:
         {
             for (int j = 0; j < vect.array.size(); j++)
             {
-                if (array[i] == vect.array[j] && antifind(inters, array[i]))
+                if (array[i] == vect.array[j] && find(inters, array[i]))
                 {
                     inters.push_back(array[i]);
                 }
@@ -59,7 +59,7 @@ public:
 
         if (inters.size() == 0)
         {
-            cout << "Not common elements";
+            cout << "Not common elements, try again";
         }
         else
         {
