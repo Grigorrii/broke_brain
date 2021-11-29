@@ -1,0 +1,102 @@
+#include <iostream>
+#include <vector>
+#include <exception>
+#include <ctime>
+
+using namespace std;
+class Vector
+{
+
+public:
+    Vector(int& size)
+    {
+        for (int i = 0; i < size; i++)
+        {
+            array.push_back(rand() % 200 - 100);
+        }
+    }
+    ~Vector() {}
+
+    void add(int value)
+    {
+        if (value > -100 && value < 100)//Проверка, что значение находится в интервале от -100 до 100
+        {
+            array.push_back(value);
+        }
+    }
+    void show()
+    {
+        for (auto iter = array.begin(); iter != array.end(); iter++)
+        {
+            cout << *iter << " ";
+        }
+        cout << endl;
+    }
+    void average()//Высчитывает среднее арифметическое значение элементов вектора
+    {
+        float nubmer = 0, summ = 0;
+        for (auto iter = array.begin(); iter != array.end(); iter++)
+        {
+            summ += *iter;
+            nubmer++;
+        }
+        float average = summ / nubmer;
+        cout << average << endl;
+    }
+    void intersection(Vector& vect)//Находит общие элементы векторов и выводит их
+    {
+        vector<int> inters;
+        for (int i = 0; i < array.size(); i++)
+        {
+            for (int j = 0; j < vect.array.size(); j++)
+            {
+                if (array[i] == vect.array[j] && antifind(inters, array[i]))
+                {
+                    inters.push_back(array[i]);
+                }
+            }
+        }
+
+        if (inters.size() == 0)
+        {
+            cout << "Not common elements";
+        }
+        else
+        {
+            for (int i = 0; i < inters.size(); i++)
+            {
+                cout << inters[i] << " ";
+            }
+        }
+        cout << endl;
+    }
+
+};
+private:
+    vector<int> array;
+    bool find(vector<int> vect, int value)//Функция ищет элемент в векторе. При истине возвращает true
+    {
+        for (int i = 0; i < vect.size(); i++)
+        {
+            if (value == vect[i])
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+int main()
+{
+    srand(time(NULL));
+    int size_vector1, size_vector2;
+    cin >> size_vector1 >> size_vector2;
+    Vector vector1(size_vector1), vector2(size_vector2);
+    vector1.show();
+    vector2.show();
+    vector1.average();
+    vector2.average();
+    vector1.intersection(vector2);
+
+    return 0;
+}
