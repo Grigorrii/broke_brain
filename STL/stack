@@ -1,0 +1,120 @@
+#include <iostream>
+#include <stack>
+#include <sstream>
+#include <string>
+#include <vector>
+
+using namespace std;
+
+void initArray(int** massive, int size) 
+{// заполняем 0, но копию в main не изменяем
+	
+	for (int i = 0; i < size; i++) 
+	{
+		
+		for (int j = 0; j < size; j++) 
+		{
+			
+			massive[i][j] = 0;
+		}
+	}
+}
+
+
+ 
+
+
+
+int main() 
+{
+	
+	cout << "Enter number of stack";
+	int a;
+	int b;
+	int temp = 0;
+	string str;
+    cin >> a;
+	cin.ignore(313133, '\n');
+	
+	int** array = new int* [a];
+		
+		for (int i = 0; i < a; i++) 
+		{
+			
+			array[i] = new int[a];
+		}
+	initArray(array, a);
+
+	while (temp < a) 
+	{
+
+		getline(cin, str);
+			
+		for (int j = 0; j < str.size(); j++) 
+		{
+
+			if (str[j] == '0') 
+			{
+
+				break;
+			}
+				if (str[j] != ' ') 
+				{
+					b = str[j] - 48;
+					array[temp][b - 1] = 1;
+				}
+			
+
+			
+			}
+		temp++;
+	}
+ 
+	 stack <int> Loh;
+	
+	int num[a];
+	
+	for (int i = 0; i < a; i++) 
+	{
+
+		for (int j = 0; j < a; j++) 
+		{
+
+			num[j] = 0;
+		}
+
+		Loh.push(i);
+		
+		if (Loh.empty()) 
+		{
+			cout << "Стек пуст";
+		}
+		while (!Loh.empty()) 
+		{
+			int loh = Loh.top();
+			Loh.pop();
+			
+			if (num[loh] == 1) 
+			{
+
+		     continue;
+			}
+			num[loh] = 1;
+			for (int j = 0 ; j < a; j++)
+			{
+				if (array[loh][j] == 1 && num[j] != 1)
+				{
+
+					Loh.push();
+
+				}
+			}
+		}
+		for (int j = 0; j < a; j++)
+		{
+			cout << num[j] << " ";
+		}
+
+	}
+	return 0;
+}
