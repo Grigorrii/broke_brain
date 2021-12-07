@@ -1,0 +1,89 @@
+template <class V>
+class  Hash
+{
+    private;
+
+    list <Cache<V>> mai;
+
+    void sort(auto it)
+    {
+        Cache<V> buf;
+        auto it_big = it;
+        while (it != mai.begin())
+        {
+
+            it_big--;
+
+            if (it->pri > it_big->pri)
+            {
+
+                buf = *it;
+                it->temp = it_big->temp;
+                it->pri = it_big->pri;
+                it_big->pri = buf->pri;
+                it_big->temp = buf->temp;
+            }
+            else
+            {
+                break;
+            }
+            it--;
+        }
+    }
+    public
+        Hash()
+    {
+
+    }
+    ~Hash()
+    {
+
+    }
+    V getCache(V value)
+    {
+       Cache<V> buf;
+        for (auto i t = mai.begin(); it != mai.end(); it++)
+        {
+            if (it->temp == value)
+            {
+                it->pri++;
+                sort(it);
+                return it->temp;
+            }
+        }
+    }
+
+    void add(T value)
+    {
+        Cache<T>new_cache;
+        new_cache.temp = value;
+        mai.push_back(new_cache);
+    }
+    
+    void print() 
+    {
+        for (auto i t = mai.begin(); it != mai.end(); it++)
+        {
+            cout << it->temp << " : " << it->pri<<endl;
+        }
+    }
+};
+
+
+int main()
+{
+    Hash<char> rowing;
+    for (char i = 60; i < 90; i++)
+    {
+        rowing.add(i);
+    }
+    rowing.getCache('R');
+    rowing.getCache('O');
+    rowing.getCache('W');
+    rowing.getCache('I');
+    rowing.getCache('N');
+    rowing.getCache('G');
+    rowing.print();
+
+    return 0;
+}
