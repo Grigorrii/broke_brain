@@ -1,89 +1,101 @@
-template <class V>
+#include <iostream>
+#include <list>
+
+using namespace std;
+
+template <typename T>// шаблоны труктуры
+struct Loh
+{
+	T temp;// data
+	int pri = 0;// pri
+
+};
+
+template <class V>// шаблон класса
 class  Hash
 {
-    private;
+private:
+	list <Loh<V>> mai;
 
-    list <Cache<V>> mai;
+	void sort(auto it)
+	{
+		Loh<V> buf;
+		auto it_big = it;
+		while (it != mai.begin())
+		{
 
-    void sort(auto it)
-    {
-        Cache<V> buf;
-        auto it_big = it;
-        while (it != mai.begin())
-        {
+			it_big--;
 
-            it_big--;
+			if (it->pri > it_big->pri)
+			{
 
-            if (it->pri > it_big->pri)
-            {
+				buf = *it;
+				it->temp = it_big->temp;
+				it->pri = it_big->pri;
+				it_big->pri = buf->pri;
+				it_big->temp = buf->temp;
+			}
+			else
+			{
+				break;
+			}
+			it--;
+		}
+	}
+public:
+	Hash()
+	{
 
-                buf = *it;
-                it->temp = it_big->temp;
-                it->pri = it_big->pri;
-                it_big->pri = buf->pri;
-                it_big->temp = buf->temp;
-            }
-            else
-            {
-                break;
-            }
-            it--;
-        }
-    }
-    public
-        Hash()
-    {
+	}
+	~Hash()
+	{
 
-    }
-    ~Hash()
-    {
+	}
+	V getCache(V value)
+	{
+		Loh<V> buf;
+		for (auto it = mai.begin(); it != mai.end(); it++)
+		{
+			if (it->temp == value)
+			{
+				it->pri++;
+				sort(it);
+				return it->temp;
+			}
+		}
+	}
 
-    }
-    V getCache(V value)
-    {
-       Cache<V> buf;
-        for (auto i t = mai.begin(); it != mai.end(); it++)
-        {
-            if (it->temp == value)
-            {
-                it->pri++;
-                sort(it);
-                return it->temp;
-            }
-        }
-    }
+	void add(V value)
+	{
+		Loh<V> new_Loh;
+		new_Loh.temp = value;
+		mai.push_back(new_Loh);
+	}
 
-    void add(T value)
-    {
-        Cache<T>new_cache;
-        new_cache.temp = value;
-        mai.push_back(new_cache);
-    }
-    
-    void print() 
-    {
-        for (auto i t = mai.begin(); it != mai.end(); it++)
-        {
-            cout << it->temp << " : " << it->pri<<endl;
-        }
-    }
+	void print()
+	{
+		for (auto it = mai.begin(); it != mai.end(); it++)
+		{
+			cout << it->temp << " : " << it->pri << endl;
+		}
+	}
 };
 
 
 int main()
 {
-    Hash<char> rowing;
-    for (char i = 60; i < 90; i++)
-    {
-        rowing.add(i);
-    }
-    rowing.getCache('R');
-    rowing.getCache('O');
-    rowing.getCache('W');
-    rowing.getCache('I');
-    rowing.getCache('N');
-    rowing.getCache('G');
-    rowing.print();
+	Hash<char> rowing;
+	for (char i = 65; i < 90; i++) //перебираем буквы алфавита
+	{
+		rowing.add(i);
+	}
+	rowing.getCache('R');
+	rowing.getCache('O');
+	rowing.getCache('W');
+	rowing.getCache('I');
+	rowing.getCache('N');
+	rowing.getCache('G');
+	rowing.print();
 
-    return 0;
+	return 0;
 }
