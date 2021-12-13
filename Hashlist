@@ -1,13 +1,14 @@
 #include <iostream>
 #include <list>
+#include <iterator>
 
 using namespace std;
 
 template <typename T>// шаблоны труктуры
 struct Loh
 {
-	T temp;// data
-	int pri = 0;// pri
+	T temp;
+	int pri = 0;
 
 };
 
@@ -15,9 +16,11 @@ template <class V>// шаблон класса
 class  Hash
 {
 private:
-	list <Loh<V>> mai;
+	list <Loh<V>> mai;// двусвязный список из библиотеки STL
 
-	void sort(auto it)
+	typename list <Loh<V>> ::iterator iter;
+
+	void sort(typename list <Loh<V>> ::iterator it)// произодим сортировку 
 	{
 		Loh<V> buf;
 		auto it_big = it;
@@ -32,8 +35,8 @@ private:
 				buf = *it;
 				it->temp = it_big->temp;
 				it->pri = it_big->pri;
-				it_big->pri = buf->pri;
-				it_big->temp = buf->temp;
+				it_big->pri = buf.pri;
+				it_big->temp = buf.temp;
 			}
 			else
 			{
@@ -43,7 +46,7 @@ private:
 		}
 	}
 public:
-	Hash()
+	Hash()// спросить о правилах трех и пяти и 0
 	{
 
 	}
@@ -51,21 +54,21 @@ public:
 	{
 
 	}
-	V getCache(V value)
+	V getCache(V value)// хешируемуем функцию
 	{
 		Loh<V> buf;
-		for (auto it = mai.begin(); it != mai.end(); it++)
+		for (iter = mai.begin(); iter != mai.end(); iter++)
 		{
-			if (it->temp == value)
+			if (iter->temp == value)
 			{
-				it->pri++;
-				sort(it);
-				return it->temp;
+				iter->pri++;
+				sort(iter);
+				return iter->temp;
 			}
 		}
 	}
 
-	void add(V value)
+	void add(V value)//добавляем элимент
 	{
 		Loh<V> new_Loh;
 		new_Loh.temp = value;
@@ -74,9 +77,9 @@ public:
 
 	void print()
 	{
-		for (auto it = mai.begin(); it != mai.end(); it++)
+		for ( iter = mai.begin(); iter != mai.end(); iter++)
 		{
-			cout << it->temp << " : " << it->pri << endl;
+			cout << iter->temp << " : " << iter->pri << endl;
 		}
 	}
 };
@@ -94,6 +97,8 @@ int main()
 	rowing.getCache('W');
 	rowing.getCache('I');
 	rowing.getCache('N');
+	rowing.getCache('G');
+	rowing.print();
 	rowing.getCache('G');
 	rowing.print();
 
